@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NewXphere — 뉴엑스피어</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" rel="stylesheet">
+<style>
+:root {
+  --bg:       #08090a;
+  --bg2:      #0f1113;
+  --fg:       #e8eae6;
+  --fg2:      #7a8480;
+  --fg3:      #2e3530;
+  --green:    #4ade80;
+  --green-d:  #0f2318;
+  --teal:     #00c4a3;
+  --line:     rgba(255,255,255,0.072);
+  --line-g:   rgba(74,222,128,0.18);
+  --glass:    rgba(255,255,255,0.032);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--fg);font-family:'Pretendard Variable','Pretendard','Apple SD Gothic Neo',sans-serif;overflow-x:hidden}
+
+/* noise */
+body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.22;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:800;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(8,9,10,.85);backdrop-filter:blur(32px) saturate(1.6);border-bottom:1px solid var(--line)}
+.logo{font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-.025em;display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none;color:inherit}
+.logo-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px rgba(74,222,128,.5);animation:pip 2.6s ease-in-out infinite}
+@keyframes pip{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.8);opacity:.3}}
+.nav-links{display:flex;gap:0;list-style:none}
+.nav-links a{display:block;padding:6px 15px;font-size:.77rem;font-weight:400;letter-spacing:.005em;color:var(--fg2);text-decoration:none;border-radius:100px;transition:color .18s;cursor:pointer}
+.nav-links a:hover{color:var(--fg)}
+.nav-links a.on{color:var(--fg)}
+.nav-cta{padding:7px 20px;border:1px solid var(--line);border-radius:100px;font-size:.74rem;font-weight:500;color:var(--fg);cursor:pointer;background:var(--glass);transition:all .22s;text-decoration:none;letter-spacing:.01em}
+.nav-cta:hover{background:var(--green);color:var(--bg);border-color:var(--green);box-shadow:0 0 20px rgba(74,222,128,.25)}
+
+/* ── PAGE SYSTEM ── */
+.pg{display:none;padding-top:62px;min-height:100vh}
+.pg.on{display:block}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .68s ease,transform .68s ease}
+.rv.vis{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+/* ── SHARED ── */
+.eyebrow{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--fg2);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--fg3)}
+.display{font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:800;letter-spacing:-.04em;line-height:.91}
+.display em{font-style:normal;color:var(--green)}
+.accent{color:var(--green)}
+.ghost{color:transparent;-webkit-text-stroke:1px rgba(74,222,128,.45)}
+
+.btn-g{display:inline-flex;align-items:center;gap:8px;padding:11px 26px;background:var(--green);color:#050a06;font-size:.77rem;font-weight:600;letter-spacing:.02em;border-radius:8px;text-decoration:none;border:none;cursor:pointer;transition:all .25s;font-family:'Pretendard Variable','Pretendard',sans-serif}
+.btn-g:hover{background:#6ee89a;box-shadow:0 6px 24px rgba(74,222,128,.18)}
+.btn-g span{position:relative;z-index:1}
+.btn-o{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border:1px solid var(--line);border-radius:8px;font-size:.77rem;color:var(--fg2);text-decoration:none;cursor:pointer;background:none;transition:all .22s;font-family:'Pretendard Variable','Pretendard',sans-serif}
+.btn-o:hover{border-color:rgba(255,255,255,.15);color:var(--fg)}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--line);padding:52px 52px 28px;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:44px}
+.f-logo{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.f-logo span{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block}
+.f-desc{font-size:.75rem;line-height:1.8;color:var(--fg3);max-width:230px}
+.f-col h5{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg2);margin-bottom:14px;font-weight:700}
+.f-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.f-col a{font-size:.75rem;color:var(--fg3);text-decoration:none;transition:color .25s;cursor:pointer}
+.f-col a:hover{color:var(--green)}
+.f-bottom{border-top:1px solid var(--line);padding:18px 52px;display:flex;justify-content:space-between;align-items:center}
+.f-bottom span{font-size:.68rem;color:var(--fg3)}
+.f-bl{display:flex;gap:18px}
+.f-bl a{font-size:.68rem;color:var(--fg3);text-decoration:none;cursor:pointer;transition:color .25s}
+.f-bl a:hover{color:var(--fg2)}
+
+/* ════════════════════════════════
+   HOME
+════════════════════════════════ */
+
+/* hero */
+.hero{min-height:calc(100vh - 62px);display:flex;flex-direction:column;justify-content:flex-end;padding:0 52px 68px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 68% 28%,rgba(46,120,80,.15),transparent 60%),
+             radial-gradient(ellipse 45% 45% at 20% 72%,rgba(0,180,150,.07),transparent 55%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(62,207,106,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(62,207,106,.035) 1px,transparent 1px);
+  background-size:84px 84px;
+  mask-image:radial-gradient(ellipse 75% 75% at 55% 38%,black 15%,transparent 72%)}
+
+.hero-eye{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:10px;margin-bottom:22px;animation:fu .7s ease forwards .15s;opacity:0}
+.hero-eye::before{content:'';width:26px;height:1px;background:var(--green)}
+
+.hero-h{font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:800;font-size:clamp(3.8rem,9vw,10rem);line-height:.88;letter-spacing:-.042em;margin-bottom:52px;animation:fu .85s ease forwards .3s;opacity:0}
+.hero-h .push{display:block;padding-left:clamp(56px,11vw,132px)}
+
+.hero-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:36px;animation:fu .85s ease forwards .55s;opacity:0}
+.hero-desc{font-size:.9rem;line-height:1.85;color:var(--fg2);font-weight:300;max-width:380px}
+.hero-desc b{color:var(--fg);font-weight:500}
+.hero-ctas{display:flex;gap:10px;flex-shrink:0}
+
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* marquee */
+.mq{overflow:hidden;padding:15px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--glass)}
+.mq-t{display:flex;gap:46px;width:max-content;animation:mq 25s linear infinite}
+.mq-i{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--fg3);white-space:nowrap;display:flex;align-items:center;gap:14px}
+.mq-i::after{content:'✦';color:var(--green);font-size:.46rem}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── WHO ── */
+.who{padding:96px 52px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.who-l h2{font-size:clamp(2rem,3.2vw,3.4rem);margin-bottom:18px;font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:700;letter-spacing:-.035em;line-height:.93}
+.who-l h2 em{font-style:normal;color:var(--green)}
+.who-l p{font-size:.86rem;line-height:1.9;color:var(--fg2);font-weight:300;max-width:400px;margin-bottom:28px}
+
+/* two-path */
+.paths{display:flex;flex-direction:column;gap:8px}
+.path{border:1px solid var(--line);border-radius:12px;padding:20px 22px;background:transparent;cursor:pointer;transition:all .28s;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden}
+.path::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .28s}
+.path.edu::before{background:linear-gradient(120deg,rgba(74,222,128,.04),transparent 60%)}
+.path.eco::before{background:linear-gradient(120deg,rgba(74,222,128,.04),transparent 60%)}
+.path:hover{border-color:rgba(255,255,255,.12);transform:translateX(2px)}
+.path:hover::before{opacity:1}
+.path-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;border:1px solid var(--line);background:var(--bg2)}
+.path-txt{flex:1}
+.path-txt h3{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.88rem;font-weight:700;margin-bottom:3px;letter-spacing:-.01em}
+.path-txt p{font-size:.72rem;color:var(--fg2);line-height:1.5}
+.path-arr{color:var(--fg3);transition:all .25s;font-size:.85rem}
+.path:hover .path-arr{color:var(--green);transform:translateX(3px)}
+
+/* ── EDVANCE PLATFORM ── */
+.edvance{padding:0 52px 96px}
+.edv-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px}
+.edv-head-l h2{font-size:clamp(1.9rem,3vw,3rem);margin-bottom:5px;font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:700;letter-spacing:-.025em}
+.edv-head-l p{font-size:.82rem;color:var(--fg2);max-width:500px;line-height:1.7}
+.edv-head-r a{font-size:.73rem;color:var(--fg2);text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer;transition:all .22s}
+.edv-head-r a:hover{color:var(--green);gap:10px}
+
+/* platform badge */
+.edv-platform{
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  background:var(--bg2);
+  margin-bottom:10px;padding:40px 44px;
+  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
+  position:relative;
+}
+.edv-platform::after{content:'';position:absolute;right:0;top:0;bottom:0;width:40%;background:radial-gradient(ellipse at 100% 50%,rgba(74,222,128,.05),transparent 70%);pointer-events:none}
+.edv-platform h3{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.8rem;font-weight:700;letter-spacing:-.025em;margin-bottom:6px}
+.edv-platform .sub{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fg2);margin-bottom:12px}
+.edv-platform p{font-size:.82rem;line-height:1.8;color:var(--fg2);max-width:480px}
+.edv-platform-right{text-align:right;flex-shrink:0;position:relative;z-index:1}
+.edv-platform-right .coming{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--fg3);margin-bottom:10px}
+
+/* program cards */
+.prog-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px}
+.prog{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg2);cursor:pointer;transition:all .28s}
+.prog:hover{border-color:rgba(255,255,255,.12);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.prog-thumb{height:100px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.pt-sym{background:linear-gradient(135deg,rgba(0,42,32,1),rgba(8,9,10,1))}
+.pt-sea{background:linear-gradient(135deg,rgba(0,30,52,1),rgba(8,9,10,1))}
+.pt-cr{background:linear-gradient(135deg,rgba(32,16,0,1),rgba(8,9,10,1))}
+.pt-pp{background:linear-gradient(135deg,rgba(28,8,0,1),rgba(8,9,10,1))}
+.pt-rv{background:linear-gradient(135deg,rgba(0,28,44,1),rgba(8,9,10,1))}
+.prog-body{padding:14px 14px 16px}
+.prog-cat{font-size:.53rem;letter-spacing:.16em;text-transform:uppercase;color:var(--fg2);margin-bottom:5px;font-weight:500}
+.prog-body h4{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;line-height:1.3}
+.prog-body p{font-size:.67rem;line-height:1.55;color:var(--fg2)}
+
+/* coming soon row */
+.prog-more{border:1px solid var(--line);border-radius:12px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:default;background:var(--bg2)}
+.prog-more span{font-size:.72rem;color:var(--fg2);letter-spacing:.02em}
+.prog-more .dots{display:flex;gap:5px}
+.prog-more .dot-item{width:26px;height:26px;border-radius:7px;background:var(--fg3);opacity:.25;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+
+/* ── OTHER SERVICES ── */
+.other{padding:0 52px 96px}
+.other-head{margin-bottom:28px}
+.other-head h2{font-size:clamp(1.9rem,3vw,3rem);margin-bottom:5px;font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:700;letter-spacing:-.025em}
+.other-head p{font-size:.82rem;color:var(--fg2);max-width:520px;line-height:1.7}
+
+.other-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.svc{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg2);cursor:pointer;transition:all .28s;display:flex;flex-direction:column}
+.svc:hover{border-color:rgba(255,255,255,.12);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.35)}
+.svc.wide{grid-column:span 2;flex-direction:row}
+.svc-thumb{height:140px;display:flex;align-items:center;justify-content:center;font-size:44px}
+.svc.wide .svc-thumb{width:170px;height:auto;flex-shrink:0}
+.st-climate{background:linear-gradient(140deg,rgba(0,40,30,1),rgba(8,9,10,1))}
+.st-edu{background:linear-gradient(140deg,rgba(22,38,24,1),rgba(8,9,10,1))}
+.st-impact{background:linear-gradient(140deg,rgba(30,22,0,1),rgba(8,9,10,1))}
+.st-event{background:linear-gradient(140deg,rgba(30,0,38,1),rgba(8,9,10,1))}
+.st-igora{background:linear-gradient(140deg,rgba(10,26,40,1),rgba(8,9,10,1))}
+.svc-body{padding:20px 18px;flex:1}
+.svc-label{font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--fg2);margin-bottom:7px;font-weight:500}
+.svc-body h3{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.96rem;font-weight:700;letter-spacing:-.015em;margin-bottom:7px;line-height:1.3}
+.svc.wide .svc-body h3{font-size:1.18rem}
+.svc-body p{font-size:.73rem;line-height:1.65;color:var(--fg2)}
+.svc-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.svc-foot span{font-size:.62rem;color:var(--fg3)}
+.svc-foot a{font-size:.67rem;color:var(--fg2);text-decoration:none;display:flex;align-items:center;gap:5px;cursor:pointer;transition:all .2s}
+.svc-foot a:hover{color:var(--green);gap:8px}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{text-align:center;padding:60px 16px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:clamp(2.8rem,4vw,4.5rem);font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:8px}
+.stat-n em{font-style:normal;color:var(--green)}
+.stat-l{font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg2)}
+
+/* ── PARTNERS ── */
+.partners{padding:64px 52px}
+.p-lbl{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fg3);text-align:center;margin-bottom:28px}
+.p-row{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.p-chip{padding:7px 18px;border:1px solid var(--line);border-radius:8px;font-size:.7rem;color:var(--fg3);background:transparent;transition:all .2s}
+.p-chip:hover{border-color:rgba(255,255,255,.12);color:var(--fg2)}
+
+/* ── CTA ── */
+.cta{margin:0 52px 64px;border-radius:16px;padding:64px 56px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;border:1px solid var(--line);background:var(--bg2);position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;right:0;top:0;bottom:0;width:45%;background:radial-gradient(ellipse at 100% 50%,rgba(74,222,128,.05),transparent 65%);pointer-events:none}
+.cta h2{font-size:clamp(1.6rem,2.6vw,2.6rem);margin-bottom:8px;font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:700;letter-spacing:-.025em}
+.cta h2 em{font-style:normal;color:var(--green)}
+.cta p{font-size:.84rem;line-height:1.8;color:var(--fg2);max-width:430px}
+.cta-r{display:flex;flex-direction:column;gap:9px;align-items:flex-end;flex-shrink:0}
+
+/* ════════════════════════════════
+   ABOUT
+════════════════════════════════ */
+.pg-top{padding:80px 52px;border-bottom:1px solid var(--line)}
+.pg-top h1{font-size:clamp(2.8rem,5.5vw,6rem);margin-bottom:18px;font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:700;letter-spacing:-.035em;line-height:.92}
+.pg-top h1 em{font-style:normal;color:var(--green)}
+.pg-top > p{font-size:.88rem;line-height:1.9;color:var(--fg2);font-weight:300;max-width:500px}
+
+.about-split{padding:72px 52px;display:grid;grid-template-columns:1fr 1fr;gap:68px;align-items:start;border-bottom:1px solid var(--line)}
+.about-kv{border:1px solid var(--line);border-radius:14px;padding:32px;background:var(--bg2);position:relative;overflow:hidden}
+.about-kv-q{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.3rem;font-weight:400;line-height:1.5;margin-bottom:20px;letter-spacing:-.01em}
+.about-kv-q em{font-style:normal;color:var(--green)}
+.kv-tags{display:flex;flex-wrap:wrap;gap:6px}
+.kv-tag{padding:5px 11px;border:1px solid var(--line);border-radius:7px;font-size:.66rem;color:var(--fg2)}
+
+.about-left h2{font-size:clamp(1.7rem,2.6vw,2.6rem);margin-bottom:14px;font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:700;letter-spacing:-.025em}
+.about-left h2 em{font-style:normal;color:var(--green)}
+.about-left p{font-size:.84rem;line-height:1.9;color:var(--fg2);font-weight:300;margin-bottom:12px}
+
+.mission-row{padding:0 52px 72px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mc{border:1px solid var(--line);border-radius:12px;padding:28px 22px;background:var(--bg2);transition:all .25s}
+.mc:hover{border-color:rgba(255,255,255,.1);transform:translateY(-2px)}
+.mc-n{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:3.2rem;font-weight:400;color:rgba(74,222,128,.1);letter-spacing:-.03em;line-height:1;margin-bottom:14px}
+.mc h3{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:7px;letter-spacing:-.01em}
+.mc p{font-size:.76rem;line-height:1.75;color:var(--fg2)}
+
+.tl-section{padding:0 52px 72px;border-top:1px solid var(--line)}
+.tl-h{padding:60px 0 32px}
+.tl-h h2{font-size:clamp(1.7rem,2.6vw,2.6rem);margin-bottom:0;font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:700;letter-spacing:-.025em}
+.tl-h h2 em{font-style:normal;color:var(--green)}
+.tl-grid{display:grid;grid-template-columns:210px 1fr;gap:52px}
+.tl-nav{position:relative}
+.tl-nav::before{content:'';position:absolute;left:5px;top:8px;bottom:8px;width:1px;background:var(--line)}
+.tl-r{display:flex;gap:16px;padding-bottom:26px;cursor:pointer}
+.tl-d{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--fg3);background:var(--bg);flex-shrink:0;margin-top:3px;transition:all .25s}
+.tl-r.on .tl-d{border-color:var(--green);background:var(--green);box-shadow:0 0 8px rgba(74,222,128,.3)}
+.tl-r.on .tl-yr{color:var(--fg)}
+.tl-yr{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.78rem;font-weight:700;color:var(--fg3);transition:color .25s}
+.tl-sub{font-size:.67rem;color:var(--fg3);margin-top:3px;line-height:1.5}
+.tl-panel{display:none}
+.tl-panel.on{display:block}
+.tl-panel h3{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
+.tl-panel h3 em{font-style:normal;color:var(--green)}
+.tl-panel p{font-size:.84rem;line-height:2;color:var(--fg2);font-weight:300;margin-bottom:10px}
+
+.team-section{padding:0 52px 72px}
+.team-h{padding-bottom:24px}
+.team-h h2{font-size:clamp(1.7rem,2.6vw,2.6rem);font-family:'Pretendard Variable','Pretendard',sans-serif;font-weight:700;letter-spacing:-.025em}
+.team-h h2 em{font-style:normal;color:var(--green)}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tc{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg2);transition:all .25s}
+.tc:hover{border-color:rgba(255,255,255,.1);transform:translateY(-2px)}
+.tc-av{height:140px;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(140deg,var(--green-d),rgba(8,9,10,1))}
+.tc-info{padding:16px}
+.tc-info h4{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.85rem;font-weight:700;margin-bottom:2px;letter-spacing:-.01em}
+.tc-role{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fg2);margin-bottom:8px}
+.tc-info p{font-size:.67rem;line-height:1.6;color:var(--fg2)}
+
+/* ════════════════════════════════
+   SOLUTIONS (what we do)
+════════════════════════════════ */
+.sol-section{padding:60px 52px;border-bottom:1px solid var(--line)}
+.sol-section:last-of-type{border-bottom:none}
+.sol-hd{display:grid;grid-template-columns:220px 1fr;gap:44px;align-items:start;margin-bottom:32px}
+.sol-hd-l .sol-num{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg3);margin-bottom:7px}
+.sol-hd-l h2{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:2rem;font-weight:700;letter-spacing:-.025em;line-height:1;color:var(--green);margin-bottom:3px}
+.sol-hd-l .sol-en{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--fg3)}
+.sol-hd-r p{font-size:.83rem;line-height:1.85;color:var(--fg2);max-width:500px}
+
+/* edvance full section */
+.edvance-sol .prog-grid{grid-template-columns:repeat(5,1fr)}
+
+/* climate cards */
+.sol-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sol-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg2);cursor:pointer;transition:all .25s;display:flex;flex-direction:column}
+.sol-card:hover{border-color:rgba(255,255,255,.1);transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.3)}
+.sol-card.big{grid-column:span 2;flex-direction:row}
+.sc-th{height:130px;display:flex;align-items:center;justify-content:center;font-size:44px}
+.sol-card.big .sc-th{width:160px;height:auto;flex-shrink:0}
+.sc-bd{padding:18px 17px;flex:1}
+.sc-lbl{font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--fg2);margin-bottom:7px;font-weight:500}
+.sc-bd h3{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.93rem;font-weight:700;letter-spacing:-.015em;margin-bottom:6px}
+.sol-card.big .sc-bd h3{font-size:1.15rem}
+.sc-bd p{font-size:.71rem;line-height:1.65;color:var(--fg2)}
+.sc-ft{padding:11px 17px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+.sc-ft a{font-size:.65rem;color:var(--fg2);text-decoration:none;display:flex;align-items:center;gap:5px;cursor:pointer;transition:all .2s}
+.sc-ft a:hover{color:var(--green);gap:9px}
+
+/* ════════════════════════════════
+   PROJECTS (list style)
+════════════════════════════════ */
+.proj-filter{padding:22px 52px 0;display:flex;gap:7px;flex-wrap:wrap}
+.pf{padding:6px 15px;border:1px solid var(--line);border-radius:100px;font-size:.7rem;color:var(--fg2);cursor:pointer;background:var(--glass);transition:all .2s}
+.pf.on,.pf:hover{border-color:var(--line-g);color:var(--green)}
+.proj-list{padding:18px 52px 80px;display:flex;flex-direction:column;gap:1px;background:var(--line)}
+.proj-row{background:var(--bg);display:grid;grid-template-columns:100px 1fr auto;gap:28px;align-items:center;padding:26px 30px;cursor:pointer;transition:background .22s}
+.proj-row:hover{background:var(--bg2)}
+.proj-row:first-child{border-radius:14px 14px 0 0}
+.proj-row:last-child{border-radius:0 0 14px 14px}
+.pr-th{width:92px;height:64px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.pr-th.g{background:linear-gradient(135deg,rgba(14,31,23,1),rgba(6,9,9,.9))}
+.pr-th.t{background:linear-gradient(135deg,rgba(0,30,25,1),rgba(6,9,9,.9))}
+.pr-th.a{background:linear-gradient(135deg,rgba(34,20,0,1),rgba(6,9,9,.9))}
+.pr-th.v{background:linear-gradient(135deg,rgba(32,0,42,1),rgba(6,9,9,.9))}
+.pr-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+.pr-tag{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:100px;border:1px solid var(--line-g);color:var(--green)}
+.pr-bd h3{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.96rem;font-weight:700;letter-spacing:-.015em;margin-bottom:4px}
+.pr-bd p{font-size:.73rem;line-height:1.6;color:var(--fg2)}
+.pr-r{text-align:right;flex-shrink:0}
+.pr-yr{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.78rem;font-weight:700;color:var(--fg3);margin-bottom:5px}
+.pr-arr{font-size:.72rem;color:var(--fg3);transition:color .22s}
+.proj-row:hover .pr-arr{color:var(--green)}
+
+/* ════════════════════════════════
+   STORY
+════════════════════════════════ */
+.story-filter{padding:22px 52px 0;display:flex;gap:7px}
+.sf{padding:6px 15px;border:1px solid var(--line);border-radius:100px;font-size:.7rem;color:var(--fg2);cursor:pointer;background:var(--glass);transition:all .2s}
+.sf.on,.sf:hover{border-color:var(--line-g);color:var(--green)}
+.feat-post{margin:20px 52px 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;cursor:pointer;background:var(--glass);transition:border-color .28s}
+.feat-post:hover{border-color:var(--line-g)}
+.fp-img{height:320px;display:flex;align-items:center;justify-content:center;font-size:86px;background:linear-gradient(135deg,rgba(14,31,23,1),rgba(6,9,9,.85))}
+.fp-body{padding:40px 34px;display:flex;flex-direction:column;justify-content:center}
+.fp-cat{font-size:.57rem;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px}
+.fp-body h2{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.025em;line-height:1.2;margin-bottom:11px}
+.fp-body p{font-size:.8rem;line-height:1.75;color:var(--fg2);margin-bottom:18px}
+.fp-meta{font-size:.65rem;color:var(--fg3);display:flex;gap:10px}
+.post-grid{padding:18px 52px 80px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.post{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--glass);cursor:pointer;transition:all .28s}
+.post:hover{border-color:var(--line-g);transform:translateY(-3px)}
+.post-img{height:128px;display:flex;align-items:center;justify-content:center;font-size:42px}
+.pi-g{background:linear-gradient(135deg,rgba(14,31,23,1),rgba(6,9,9,.7))}
+.pi-t{background:linear-gradient(135deg,rgba(0,28,24,1),rgba(6,9,9,.7))}
+.pi-a{background:linear-gradient(135deg,rgba(32,20,0,1),rgba(6,9,9,.7))}
+.pi-v{background:linear-gradient(135deg,rgba(28,0,38,1),rgba(6,9,9,.7))}
+.post-bd{padding:15px 15px 0}
+.post-cat{font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:5px;font-weight:500}
+.post-bd h3{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.84rem;font-weight:700;letter-spacing:-.01em;line-height:1.3;margin-bottom:5px}
+.post-bd p{font-size:.7rem;line-height:1.6;color:var(--fg2)}
+.post-ft{padding:10px 15px;border-top:1px solid var(--line);margin-top:11px;display:flex;justify-content:space-between;font-size:.64rem;color:var(--fg3)}
+
+/* ════════════════════════════════
+   CONTACT
+════════════════════════════════ */
+.contact-wrap{padding:80px 52px;display:grid;grid-template-columns:1fr 1fr;gap:68px}
+.cl h1{font-size:clamp(2.4rem,4vw,4.5rem);margin-bottom:16px}
+.cl h1 em{font-style:normal;color:var(--green)}
+.cl > p{font-size:.86rem;line-height:1.85;color:var(--fg2);font-weight:300;margin-bottom:30px;max-width:320px}
+.ci-list{display:flex;flex-direction:column;gap:13px}
+.ci{display:flex;gap:12px}
+.ci-ico{width:36px;height:36px;border:1px solid var(--line);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;background:var(--glass)}
+.ci h4{font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.75rem;font-weight:700;margin-bottom:2px}
+.ci p{font-size:.72rem;color:var(--fg2)}
+.cf{border:1px solid var(--line);border-radius:18px;padding:38px;background:var(--bg2)}
+.cf-head{margin-bottom:22px}
+.cf-head p{font-size:.72rem;color:var(--fg2);margin-top:4px}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.fg label{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2);font-weight:500}
+.fg input,.fg textarea,.fg select{padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:9px;color:var(--fg);font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.8rem;outline:none;transition:border-color .24s}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--green)}
+.fg textarea{resize:vertical;min-height:100px}
+.fg select{appearance:none;cursor:pointer}
+.fg select option{background:var(--bg)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ════════════════════════════════
+   MOBILE RESPONSIVE
+════════════════════════════════ */
+@media(max-width:768px){
+
+  /* NAV */
+  nav{padding:0 20px;height:54px;}
+  .nav-links{display:none;}
+  .nav-cta{padding:6px 14px;font-size:.7rem;}
+
+  /* HERO */
+  .hero{padding:0 20px 48px;min-height:calc(100vh - 54px);}
+  .hero-h{font-size:clamp(2.6rem,12vw,4.2rem);margin-bottom:32px;}
+  .hero-h .push{padding-left:clamp(28px,7vw,56px);}
+  .hero-foot{flex-direction:column;align-items:flex-start;gap:20px;}
+  .hero-desc{max-width:100%;font-size:.84rem;}
+  .hero-ctas{flex-wrap:wrap;}
+
+  /* WHO */
+  .who{grid-template-columns:1fr;gap:36px;padding:56px 20px;}
+  .paths{gap:8px;}
+
+  /* EDVANCE */
+  .edvance{padding:0 20px 56px;}
+  .edv-head{flex-direction:column;align-items:flex-start;gap:10px;}
+  .edv-platform{grid-template-columns:1fr;gap:20px;padding:24px 20px;}
+  .edv-platform-right{text-align:left;}
+  .prog-grid{grid-template-columns:repeat(2,1fr);}
+
+  /* OTHER SERVICES */
+  .other{padding:0 20px 56px;}
+  .other-grid{grid-template-columns:1fr;}
+  .svc.wide{flex-direction:column;}
+  .svc.wide .svc-thumb{width:100%;height:120px;}
+
+  /* STATS */
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .stat{padding:24px 12px;}
+  .stat-n{font-size:clamp(1.8rem,8vw,2.8rem);}
+
+  /* PARTNERS */
+  .partners{padding:44px 20px;}
+
+  /* CTA */
+  .cta{margin:0 20px 48px;padding:36px 24px;grid-template-columns:1fr;gap:24px;}
+  .cta-r{flex-direction:row;flex-wrap:wrap;}
+
+  /* FOOTER */
+  footer{grid-template-columns:1fr 1fr;gap:28px;padding:36px 20px 24px;}
+  .f-bottom{padding:14px 20px;flex-direction:column;gap:10px;text-align:center;}
+
+  /* ABOUT */
+  .pg-top{padding:48px 20px;}
+  .about-split{grid-template-columns:1fr;gap:28px;padding:40px 20px;}
+  .mission-row{grid-template-columns:1fr;padding:0 20px 48px;}
+  .tl-grid{grid-template-columns:1fr;gap:20px;}
+  .tl-section{padding:0 20px 48px;}
+  .team-grid{grid-template-columns:repeat(2,1fr);}
+  .team-section{padding:0 20px 48px;}
+
+  /* SOLUTIONS */
+  .sol-hd{grid-template-columns:1fr;gap:12px;}
+  .sol-cards{grid-template-columns:1fr;}
+  .edvance-sol .prog-grid{grid-template-columns:repeat(2,1fr);}
+
+  /* PROJECTS */
+  .proj-filter{padding:16px 20px 0;}
+  .proj-row{grid-template-columns:60px 1fr;gap:14px;padding:18px 20px;}
+  .pr-num{display:none;}
+  .feat-post{grid-template-columns:1fr;margin:16px 20px 0;}
+  .post-grid{grid-template-columns:1fr;padding:14px 20px 56px;}
+
+  /* CONTACT */
+  .contact-wrap{grid-template-columns:1fr;gap:32px;padding:48px 20px;}
+  .form-row{grid-template-columns:1fr;}
+
+  /* GENERAL */
+  .section-pad,.edvance,.other{padding-left:20px;padding-right:20px;}
+  .rv{transform:translateY(12px);}
+}
+
+@media(max-width:480px){
+  .hero-h{font-size:clamp(2.2rem,10vw,3.2rem);}
+  .prog-grid{grid-template-columns:1fr 1fr;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  footer{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" onclick="go('home')"><div class="logo-dot"></div>NewXphere</a>
+  <ul class="nav-links">
+    <li><a onclick="go('about',this)">회사소개</a></li>
+    <li><a onclick="go('solutions',this)">솔루션</a></li>
+    <li><a onclick="go('projects',this)">프로젝트</a></li>
+    <li><a onclick="go('story',this)">스토리</a></li>
+  </ul>
+  <a class="nav-cta" onclick="go('contact',null)">문의하기</a>
+</nav>
+
+<!-- ════════════════════════════════
+     HOME
+════════════════════════════════ -->
+<div class="pg on" id="pg-home">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-eye">Education × Climate Technology</div>
+    <h1 class="display hero-h">
+      더 나은 <span class="ghost">내일</span>을<span class="push">설계합니다</span>
+    </h1>
+    <div class="hero-foot">
+      <p class="hero-desc">교육과 환경, 두 가지 문제를 기술로 동시에 풀어갑니다.<br>작은 배움이 큰 변화를 만듭니다.</p>
+      <div class="hero-ctas">
+        <a class="btn-g" onclick="go('solutions',null)"><span>솔루션 보기 →</span></a>
+        <a class="btn-o" onclick="go('about',null)">회사 소개</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="mq">
+    <div class="mq-t">
+      <div class="mq-i" style="cursor:pointer;" onclick="window.open('edvance.html','_blank')">에드밴스</div><div class="mq-i">심비어스</div><div class="mq-i">아이고라</div><div class="mq-i">바다탐험대</div><div class="mq-i">탄소중립 리얼리티</div><div class="mq-i">파워플랜 2050</div><div class="mq-i">리버런</div><div class="mq-i">소셜 임팩트</div><div class="mq-i">전시 · 이벤트</div><div class="mq-i">글로벌 인재</div>
+      <div class="mq-i" style="cursor:pointer;" onclick="window.open('edvance.html','_blank')">에드밴스</div><div class="mq-i">심비어스</div><div class="mq-i">아이고라</div><div class="mq-i">바다탐험대</div><div class="mq-i">탄소중립 리얼리티</div><div class="mq-i">파워플랜 2050</div><div class="mq-i">리버런</div><div class="mq-i">소셜 임팩트</div><div class="mq-i">전시 · 이벤트</div><div class="mq-i">글로벌 인재</div>
+    </div>
+  </div>
+
+  <!-- Who -->
+  <div class="who rv">
+    <div class="who-l">
+      <div class="eyebrow" style="margin-bottom:14px;">What We Do</div>
+      <h2 class="display">두 개의 문제,<br><em>하나의 접근</em></h2>
+      <p>교육이 바뀌면 세상이 바뀌고, 환경이 회복되면 사람이 살아납니다. 뉴엑스피어는 이 두 가지를 기술로 동시에 풀어갑니다.</p>
+      <a class="btn-g" onclick="go('solutions',null)" style="font-size:.74rem;"><span>전체 솔루션 →</span></a>
+    </div>
+    <div class="paths">
+      <div class="path edu" onclick="go('solutions',null)">
+        <div class="path-ico">📚</div>
+        <div class="path-txt"><h3>에듀테크 솔루션</h3><p>아이고라 · 에드밴스 · 글로벌 인재 양성<br>학습의 방식을 새로 씁니다.</p></div>
+        <div class="path-arr">→</div>
+      </div>
+      <div class="path eco" onclick="go('solutions',null)">
+        <div class="path-ico">🌿</div>
+        <div class="path-txt"><h3>기후테크 솔루션</h3><p>심비어스 · 파워플랜 2050 · 환경교육 콘텐츠<br>지구를 지킵니다.</p></div>
+        <div class="path-arr">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EdVance Platform Spotlight -->
+  <!-- Solutions Two-Column -->
+  <div class="rv" style="padding:0 52px 96px;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:12px;">Solutions</div>
+        <h2 class="display" style="font-size:clamp(2rem,3.5vw,3.8rem);">뉴엑스피어의 <span class="accent">솔루션</span></h2>
+      </div>
+      <a class="btn-o" onclick="go('solutions',null)" style="cursor:pointer;white-space:nowrap;">전체 보기 →</a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+      <!-- 교육 솔루션 -->
+      <div onclick="go('solutions',null)" style="border:1px solid var(--line);border-radius:16px;background:var(--bg2);overflow:hidden;cursor:pointer;transition:all .28s;" onmouseover="this.style.borderColor='rgba(255,255,255,.12)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.35)'" onmouseout="this.style.borderColor='var(--line)';this.style.transform='';this.style.boxShadow=''">
+        <div style="height:180px;background:linear-gradient(140deg,rgba(0,36,22,1),rgba(8,9,10,1));display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;">
+          📚
+          <div style="position:absolute;bottom:16px;right:16px;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pip 2.6s ease-in-out infinite"></div>
+        </div>
+        <div style="padding:28px 28px 32px;">
+          <div style="font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2);margin-bottom:10px;font-weight:500;">Education</div>
+          <h3 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;">교육 솔루션</h3>
+          <p style="font-size:.8rem;line-height:1.8;color:var(--fg2);margin-bottom:20px;font-weight:300;">게이미피케이션 환경교육부터 AI 기업교육, 글로벌 인재 양성까지. 배움의 방식을 기술로 새로 씁니다.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;">
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.62rem;color:var(--fg2);">에드밴스</span>
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.62rem;color:var(--fg2);">아이고라</span>
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.62rem;color:var(--fg2);">글로벌 인재</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 기후 솔루션 -->
+      <div onclick="go('solutions',null)" style="border:1px solid var(--line);border-radius:16px;background:var(--bg2);overflow:hidden;cursor:pointer;transition:all .28s;" onmouseover="this.style.borderColor='rgba(255,255,255,.12)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.35)'" onmouseout="this.style.borderColor='var(--line)';this.style.transform='';this.style.boxShadow=''">
+        <div style="height:180px;background:linear-gradient(140deg,rgba(0,28,18,1),rgba(8,9,10,1));display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;">
+          🌿
+          <div style="position:absolute;bottom:16px;right:16px;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pip 2.6s ease-in-out infinite"></div>
+        </div>
+        <div style="padding:28px 28px 32px;">
+          <div style="font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2);margin-bottom:10px;font-weight:500;">Climate</div>
+          <h3 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;">기후 솔루션</h3>
+          <p style="font-size:.8rem;line-height:1.8;color:var(--fg2);margin-bottom:20px;font-weight:300;">생물다양성 복원 크레딧, ESG 전략 컨설팅, 임직원 환경교육. 기업 ESG를 실질적 행동으로 연결합니다.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;">
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.62rem;color:var(--fg2);">심비어스</span>
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.62rem;color:var(--fg2);">생물다양성 복원</span>
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.62rem;color:var(--fg2);">ESG 컨설팅</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Stats -->
+
+  <div class="stats rv">
+    <div class="stat"><div class="stat-n">200<em>+</em></div><div class="stat-l">파트너사</div></div>
+    <div class="stat"><div class="stat-n">50<em>만+</em></div><div class="stat-l">누적 학습자</div></div>
+    <div class="stat"><div class="stat-n">5<em>개</em></div><div class="stat-l">에드밴스 프로그램</div></div>
+    <div class="stat"><div class="stat-n">12<em>회</em></div><div class="stat-l">전시 · 이벤트</div></div>
+  </div>
+
+  <!-- Partners -->
+  <div class="partners rv">
+    <div class="p-lbl">함께하는 파트너</div>
+    <div class="p-row">
+      <div class="p-chip">삼성전자</div><div class="p-chip">LG에너지솔루션</div><div class="p-chip">현대자동차</div>
+      <div class="p-chip">SK이노베이션</div><div class="p-chip">환경부</div><div class="p-chip">교육부</div>
+      <div class="p-chip">한국환경공단</div><div class="p-chip">POSCO</div><div class="p-chip">KT</div>
+      <div class="p-chip">+ 200개 이상</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta rv">
+    <div>
+      <h2 class="display">함께 만드는 <em>변화</em></h2>
+      <p>솔루션 도입, 협업 프로그램, 전시 기획 — 어떤 이야기든 먼저 들려주세요. 24시간 내 담당자가 연락드립니다.</p>
+    </div>
+    <div class="cta-r">
+      <a class="btn-g" onclick="go('contact',null)"><span>문의하기 →</span></a>
+      <a class="btn-o" onclick="go('story',null)">사례 읽기</a>
+    </div>
+  </div>
+
+  <footer>
+    <div><div class="f-logo"><span></span>NewXphere</div><p class="f-desc">에듀테크와 기후테크의 융합으로 지속가능한 미래를 설계하는 기술 기업입니다.</p></div>
+    <div class="f-col"><h5>Company</h5><ul><li><a onclick="go('about',null)">회사소개</a></li><li><a onclick="go('projects',null)">프로젝트</a></li><li><a onclick="go('story',null)">스토리</a></li><li><a>채용</a></li></ul></div>
+    <div class="f-col"><h5>Solutions</h5><ul><li><a href="edvance.html">에드밴스</a></li><li><a onclick="go('solutions',null)">심비어스</a></li><li><a onclick="go('solutions',null)">아이고라</a></li><li><a onclick="go('solutions',null)">전체 보기</a></li></ul></div>
+    <div class="f-col"><h5>Contact</h5><ul><li><a onclick="go('contact',null)">문의하기</a></li><li><a href="https://instagram.com/newxphere" target="_blank">Instagram</a></li><li><a>LinkedIn</a></li></ul></div>
+  </footer>
+  <div class="f-bottom"><span>©2026 NewXphere. All rights reserved.</span><div class="f-bl"><a>이용약관</a><a>개인정보처리방침</a></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     ABOUT
+════════════════════════════════ -->
+<div class="pg" id="pg-about">
+  <div class="pg-top rv">
+    <div class="eyebrow" style="margin-bottom:14px;">About Us</div>
+    <h1 class="display">세상을<br><em>다시 설계하는</em><br>기업</h1>
+    <p>'새로운 구체(Sphere)'라는 이름처럼, 기후와 교육의 새로운 가능성을 기술로 탐구합니다. 단순한 솔루션 회사를 넘어, 교육 · 환경 · 문화를 아우르는 조직입니다.</p>
+  </div>
+  <div class="about-split rv">
+    <div class="about-left">
+      <h2 class="display">기후위기와<br>교육 격차를<br><em>함께 풀어갑니다</em></h2>
+      <p>뉴엑스피어는 에듀테크와 기후테크의 융합에서 출발했습니다. AI 기업교육 플랫폼, 게이미피케이션 환경 교육, ESG 복원 프로젝트까지 — 기술이 세상을 더 나은 방향으로 바꿀 수 있다는 믿음으로 움직입니다.</p>
+      <p>그리고 이제는 소셜 임팩트 협업과 아트 전시까지. 더 많은 사람이 변화에 참여할 수 있도록 영역을 넓혀갑니다.</p>
+    </div>
+    <div class="about-kv rv d2">
+      <div class="about-kv-q">기술과 교육, 환경과 예술이<br>만나는 곳에서<br><em>새로운 가능성이 태어납니다.</em></div>
+      <div class="kv-tags">
+        <span class="kv-tag">🌿 에듀테크</span><span class="kv-tag">🌍 기후테크</span>
+        <span class="kv-tag">🤝 소셜 임팩트</span><span class="kv-tag">🎭 아트 & 이벤트</span>
+        <span class="kv-tag">🤖 AI</span><span class="kv-tag">🎮 게이미피케이션</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mission-row rv">
+    <div class="mc"><div class="mc-n">01</div><h3>기술로 배운다</h3><p>AI, 게임, XR로 학습의 방식을 새로 씁니다. 기업의 인재가 더 잘 배우고 더 오래 기억할 수 있도록.</p></div>
+    <div class="mc rv d1"><div class="mc-n">02</div><h3>기술로 지킨다</h3><p>탄소중립, 생물다양성, ESG. 기술이 지구를 지키는 도구가 될 수 있다는 믿음으로 움직입니다.</p></div>
+    <div class="mc rv d2"><div class="mc-n">03</div><h3>기술로 연결한다</h3><p>사람과 사람, 기업과 지역사회, 지식과 감각. 기술로 더 넓은 변화의 연결고리를 만듭니다.</p></div>
+  </div>
+
+  <div class="tl-section rv">
+    <div class="tl-h">
+      <div class="eyebrow" style="margin-bottom:12px;">Our Story</div>
+      <h2 class="display">뉴엑스피어의 <em>여정</em></h2>
+    </div>
+    <div class="tl-grid">
+      <div class="tl-nav">
+        <div class="tl-r on" onclick="setTl(this,0)"><div class="tl-d"></div><div><div class="tl-yr">2020</div><div class="tl-sub">설립 · 비전 수립</div></div></div>
+        <div class="tl-r" onclick="setTl(this,1)"><div class="tl-d"></div><div><div class="tl-yr">2021</div><div class="tl-sub">환경교육 콘텐츠 개발</div></div></div>
+        <div class="tl-r" onclick="setTl(this,2)"><div class="tl-d"></div><div><div class="tl-yr">2022</div><div class="tl-sub">에드밴스 론칭</div></div></div>
+        <div class="tl-r" onclick="setTl(this,3)"><div class="tl-d"></div><div><div class="tl-yr">2023</div><div class="tl-sub">B2B · 소셜 임팩트 확장</div></div></div>
+        <div class="tl-r" onclick="setTl(this,4)"><div class="tl-d"></div><div><div class="tl-yr">2024</div><div class="tl-sub">AI · 전시 · 글로벌</div></div></div>
+      </div>
+      <div>
+        <div class="tl-panel on"><h3>뉴엑스피어의 <em>탄생</em></h3><p>2020년, 기후위기와 교육의 문제를 동시에 풀겠다는 미션 아래 설립됐습니다. 게임과 기술로 환경을 배우고, 그 배움이 실제 행동으로 이어지는 연결고리를 만드는 것이 첫 번째 목표였습니다.</p></div>
+        <div class="tl-panel"><h3>환경교육의 <em>새 기준</em></h3><p>2021년, 탄소중립·해양 생태계·생물다양성을 주제로 한 인터랙티브 콘텐츠가 전국 학교와 공공기관에 배포됐습니다. 지식 전달을 넘어, 직접 실험하고 선택하는 경험 중심 학습 모델을 구축했습니다.</p></div>
+        <div class="tl-panel"><h3>에드밴스 <em>플랫폼 론칭</em></h3><p>2022년, 게이미피케이션 학습 플랫폼 에드밴스가 공식 출시됐습니다. 심비어스·바다탐험대·파워플랜 2050·리버런·탄소중립 리얼리티 5개 환경 프로그램으로 시작해 누적 참여자 10만 명을 돌파했습니다.</p></div>
+        <div class="tl-panel"><h3>기업과 <em>사회로 확장</em></h3><p>2023년, B2B 기업교육 사업을 본격화하고 소셜 임팩트 협업 프로그램을 시작했습니다. 심비어스 ESG 복원 프로젝트와 생물다양성 크레딧 사업으로 기업 ESG 실행 지원까지 영역을 넓혔습니다.</p></div>
+        <div class="tl-panel"><h3>AI · 전시 · <em>글로벌 도약</em></h3><p>2024년, AI 기반 플랫폼 아이고라 출시, 첫 번째 아트 전시 《생명의 그물》 개최, 글로벌 인재 양성 프로그램 런칭. 에드밴스는 환경 이외 다른 과목으로 확장을 준비 중입니다.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-section rv">
+    <div class="team-h">
+      <div class="eyebrow" style="margin-bottom:12px;">Our Team</div>
+      <h2 class="display">함께하는 <em>팀</em></h2>
+    </div>
+    <div class="team-grid">
+      <div class="tc"><div class="tc-av">👤</div><div class="tc-info"><h4>대표이사</h4><div class="tc-role">CEO</div><p>기후테크 & 에듀테크 분야 10년 이상의 경험으로 뉴엑스피어를 이끌고 있습니다.</p></div></div>
+      <div class="tc"><div class="tc-av">👩‍💻</div><div class="tc-info"><h4>기술총괄</h4><div class="tc-role">CTO</div><p>AI 및 게임 개발 전문가. 아이고라와 에드밴스 플랫폼 아키텍처를 설계했습니다.</p></div></div>
+      <div class="tc"><div class="tc-av">🎨</div><div class="tc-info"><h4>크리에이티브 디렉터</h4><div class="tc-role">CD</div><p>UX/UI 및 콘텐츠 디자인 총괄. 전시·이벤트 기획까지 담당합니다.</p></div></div>
+      <div class="tc"><div class="tc-av">🌿</div><div class="tc-info"><h4>ESG 전략 리더</h4><div class="tc-role">Head of ESG</div><p>생물다양성 복원 프로젝트 총괄. 기업 ESG 전략 수립을 지원합니다.</p></div></div>
+    </div>
+  </div>
+
+  <footer><div><div class="f-logo"><span></span>NewXphere</div><p class="f-desc">에듀테크와 기후테크의 융합으로 지속가능한 미래를 설계합니다.</p></div><div class="f-col"><h5>Company</h5><ul><li><a onclick="go('projects',null)">프로젝트</a></li><li><a onclick="go('story',null)">스토리</a></li></ul></div><div class="f-col"><h5>Solutions</h5><ul><li><a onclick="go('solutions',null)">전체 보기</a></li></ul></div><div class="f-col"><h5>Contact</h5><ul><li><a onclick="go('contact',null)">문의하기</a></li><li><a>Instagram</a></li></ul></div></footer>
+  <div class="f-bottom"><span>©2026 NewXphere. All rights reserved.</span><div class="f-bl"><a>이용약관</a><a>개인정보처리방침</a></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     SOLUTIONS
+════════════════════════════════ -->
+<div class="pg" id="pg-solutions">
+
+  <!-- HERO -->
+  <div style="padding:120px 52px 72px;border-bottom:1px solid var(--line);position:relative;overflow:hidden;">
+    <div style="position:absolute;right:0;top:0;bottom:0;width:50%;background:radial-gradient(ellipse at 80% 40%,rgba(74,222,128,.05),transparent 65%);pointer-events:none"></div>
+    <div class="eyebrow rv" style="margin-bottom:18px;">Solutions</div>
+    <h1 class="display rv" style="font-size:clamp(3rem,6vw,6.5rem);margin-bottom:20px;">기술로 여는<br><em>지속가능한 미래</em></h1>
+    <p class="rv" style="font-size:.88rem;line-height:1.85;color:var(--fg2);font-weight:300;max-width:420px;">교육과 기후, 두 영역에서 뉴엑스피어가 만들어가는 솔루션입니다.</p>
+  </div>
+
+  <!-- 교육 솔루션 -->
+  <div style="padding:72px 52px;border-bottom:1px solid var(--line);" class="rv">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;gap:32px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px;">Education</div>
+        <h2 class="display" style="font-size:clamp(2.2rem,4vw,4rem);">교육 솔루션</h2>
+      </div>
+      <p style="font-size:.82rem;line-height:1.8;color:var(--fg2);max-width:360px;text-align:right;font-weight:300;">학교·공공기관부터 기업까지.<br>배움의 방식을 기술로 새로 씁니다.</p>
+    </div>
+
+    <!-- 에드밴스 · 아이고라 · 글로벌 인재 — 3열 동등 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+
+      <div style="border:1px solid var(--line);border-radius:16px;background:var(--bg2);overflow:hidden;display:flex;flex-direction:column;">
+        <div style="height:130px;background:linear-gradient(140deg,rgba(0,36,22,1),rgba(8,9,10,1));display:flex;align-items:center;justify-content:center;font-size:2.8rem;">🎮</div>
+        <div style="padding:26px 26px;flex:1;display:flex;flex-direction:column;">
+          <div style="font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2);margin-bottom:8px;font-weight:500;">학교 · 공공기관</div>
+          <h3 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px;">에드밴스</h3>
+          <p style="font-size:.76rem;line-height:1.75;color:var(--fg2);margin-bottom:18px;font-weight:300;flex:1;">게이미피케이션 기반 환경교육 플랫폼. 학습 완주율 3배, 환경 분야 5개 프로그램 운영 중.</p>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px;">
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.6rem;color:var(--fg2);">게이미피케이션</span>
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.6rem;color:var(--fg2);">환경교육 5종</span>
+          </div>
+          <a class="btn-o" style="cursor:pointer;width:fit-content;font-size:.72rem;" onclick="go('contact',null)">도입 문의 →</a>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--line);border-radius:16px;background:var(--bg2);overflow:hidden;display:flex;flex-direction:column;">
+        <div style="height:130px;background:linear-gradient(140deg,rgba(10,26,40,1),rgba(8,9,10,1));display:flex;align-items:center;justify-content:center;font-size:2.8rem;">🤖</div>
+        <div style="padding:26px 26px;flex:1;display:flex;flex-direction:column;">
+          <div style="font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2);margin-bottom:8px;font-weight:500;">B2B · 기업 인재개발</div>
+          <h3 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px;">아이고라</h3>
+          <p style="font-size:.76rem;line-height:1.75;color:var(--fg2);margin-bottom:18px;font-weight:300;flex:1;">AI가 임직원 개인별 학습 경로를 설계하고 성과를 실시간으로 분석하는 기업교육 플랫폼.</p>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px;">
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.6rem;color:var(--fg2);">AI 맞춤 학습</span>
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.6rem;color:var(--fg2);">파일럿 진행 중</span>
+          </div>
+          <a class="btn-o" style="cursor:pointer;width:fit-content;font-size:.72rem;" onclick="go('contact',null)">파일럿 신청 →</a>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--line);border-radius:16px;background:var(--bg2);overflow:hidden;display:flex;flex-direction:column;">
+        <div style="height:130px;background:linear-gradient(140deg,rgba(18,28,12,1),rgba(8,9,10,1));display:flex;align-items:center;justify-content:center;font-size:2.8rem;">🌏</div>
+        <div style="padding:26px 26px;flex:1;display:flex;flex-direction:column;">
+          <div style="font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2);margin-bottom:8px;font-weight:500;">글로벌 · 인재 양성</div>
+          <h3 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px;">글로벌 인재 양성</h3>
+          <p style="font-size:.76rem;line-height:1.75;color:var(--fg2);margin-bottom:18px;font-weight:300;flex:1;">국제 감각과 지속가능성 역량을 동시에 갖춘 미래 리더 양성 프로그램. 학교·기업 모두 대상.</p>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px;">
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.6rem;color:var(--fg2);">지속가능성</span>
+            <span style="padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.6rem;color:var(--fg2);">학교·기업</span>
+          </div>
+          <a class="btn-o" style="cursor:pointer;width:fit-content;font-size:.72rem;" onclick="go('contact',null)">문의하기 →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 기후 솔루션 -->
+  <div style="padding:72px 52px;" class="rv">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;gap:32px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px;">Climate</div>
+        <h2 class="display" style="font-size:clamp(2.2rem,4vw,4rem);">기후 솔루션</h2>
+      </div>
+      <p style="font-size:.82rem;line-height:1.8;color:var(--fg2);max-width:360px;text-align:right;font-weight:300;">기업 ESG를 실질적인 행동으로.<br>생물다양성 복원부터 전략 컨설팅까지.</p>
+    </div>
+
+    <!-- 심비어스 (flagship) -->
+    <div style="border:1px solid var(--line);border-radius:16px;background:var(--bg2);margin-bottom:10px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;">
+      <div style="padding:40px 40px;border-right:1px solid var(--line);">
+        <div style="font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2);margin-bottom:10px;font-weight:500;">B2B · ESG · 플래그십</div>
+        <h3 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:10px;">심비어스 <span style="font-weight:400;color:var(--fg2);font-size:1rem;">Symbious</span></h3>
+        <p style="font-size:.8rem;line-height:1.8;color:var(--fg2);margin-bottom:24px;font-weight:300;">생물다양성 크레딧 발행, 생태계 복원 프로젝트, ESG 전략 컨설팅을 아우르는 End-to-End 기후 솔루션. 독립 사이트 운영 중.</p>
+        <div style="display:flex;gap:10px;">
+          <a class="btn-g" onclick="go('contact',null)"><span>도입 문의 →</span></a>
+          <a class="btn-o" style="cursor:pointer;font-size:.74rem;">심비어스 사이트</a>
+        </div>
+      </div>
+      <div style="padding:36px 36px;display:flex;flex-direction:column;gap:10px;justify-content:center;">
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);">
+          <span style="font-size:1.2rem;flex-shrink:0;">🦋</span>
+          <div><h4 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.82rem;font-weight:700;margin-bottom:3px;">생물다양성 복원</h4><p style="font-size:.7rem;color:var(--fg2);line-height:1.55;">훼손된 생태계를 과학적으로 복원하고 크레딧 발행</p></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);">
+          <span style="font-size:1.2rem;flex-shrink:0;">📋</span>
+          <div><h4 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.82rem;font-weight:700;margin-bottom:3px;">ESG 전략 컨설팅</h4><p style="font-size:.7rem;color:var(--fg2);line-height:1.55;">전략 수립, 임직원 교육, 공시 대응 원스톱</p></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);">
+          <span style="font-size:1.2rem;flex-shrink:0;">🎓</span>
+          <div><h4 style="font-family:'Pretendard Variable','Pretendard',sans-serif;font-size:.82rem;font-weight:700;margin-bottom:3px;">임직원 환경교육</h4><p style="font-size:.7rem;color:var(--fg2);line-height:1.55;">에드밴스 프로그램 기업 맞춤 커스터마이징</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer><div><div class="f-logo"><span></span>NewXphere</div><p class="f-desc">에듀테크와 기후테크의 융합으로 지속가능한 미래를 설계합니다.</p></div><div class="f-col"><h5>Company</h5><ul><li><a onclick="go('about',null)">회사소개</a></li><li><a onclick="go('projects',null)">프로젝트</a></li></ul></div><div class="f-col"><h5>Solutions</h5><ul><li><a href="edvance.html">에드밴스</a></li><li><a>심비어스</a></li><li><a>아이고라</a></li></ul></div><div class="f-col"><h5>Contact</h5><ul><li><a onclick="go('contact',null)">문의하기</a></li></ul></div></footer>
+  <div class="f-bottom"><span>©2026 NewXphere. All rights reserved.</span><div class="f-bl"><a>이용약관</a><a>개인정보처리방침</a></div></div>
+</div>
+
+<div class="pg" id="pg-projects">
+  <div class="pg-top rv">
+    <div class="eyebrow" style="margin-bottom:14px;">Projects</div>
+    <h1 class="display">세상을 바꾸는<br><em>프로젝트들</em></h1>
+    <p>기업, 학교, 공공기관, 지역사회와 함께 실행한 실제 프로젝트입니다.</p>
+  </div>
+  <div class="proj-filter">
+    <div class="pf on">전체</div><div class="pf">에듀테크</div><div class="pf">기후테크</div><div class="pf">ESG</div><div class="pf">소셜 임팩트</div><div class="pf">전시</div>
+  </div>
+  <div class="proj-list rv">
+    <div class="proj-row"><div class="pr-th g">🌿</div><div class="pr-bd"><div class="pr-tags"><span class="pr-tag">기후테크</span><span class="pr-tag">ESG</span><span class="pr-tag">생물다양성</span></div><h3>심비어스 캠페인 × 대기업 그룹</h3><p>임직원 1만 명 대상 생물다양성 인식 캠페인. 체험 콘텐츠, 크레딧 연계, ESG 보고서 반영까지 End-to-End 실행.</p></div><div class="pr-r"><div class="pr-yr">2024</div><div class="pr-arr">→</div></div></div>
+    <div class="proj-row"><div class="pr-th g">🤖</div><div class="pr-bd"><div class="pr-tags"><span class="pr-tag">에듀테크</span><span class="pr-tag">AI</span></div><h3>아이고라 파일럿 × 제조기업 500인</h3><p>국내 중견 제조기업 임직원 500명 대상 AI 기업교육 플랫폼 파일럿 성공 완료.</p></div><div class="pr-r"><div class="pr-yr">2024</div><div class="pr-arr">→</div></div></div>
+    <div class="proj-row"><div class="pr-th v">🎭</div><div class="pr-bd"><div class="pr-tags"><span class="pr-tag">전시</span><span class="pr-tag">아트</span></div><h3>《생명의 그물》 인터랙티브 아트 전시</h3><p>생물다양성 주제 체험형 전시. 3주간 2,800명 관람. 관람객이 직접 생태계 지도를 완성하는 참여형 구성.</p></div><div class="pr-r"><div class="pr-yr">2024</div><div class="pr-arr">→</div></div></div>
+    <div class="proj-row"><div class="pr-th a">🤝</div><div class="pr-bd"><div class="pr-tags"><span class="pr-tag">소셜 임팩트</span><span class="pr-tag">협업</span></div><h3>도시재생 × 소셜 테크 협업 프로그램</h3><p>지역 커뮤니티와 기술 스타트업을 연결하는 4개월 임팩트 협업 프로그램. 6개 팀 매칭 완료.</p></div><div class="pr-r"><div class="pr-yr">2024</div><div class="pr-arr">→</div></div></div>
+    <div class="proj-row"><div class="pr-th g">⚡</div><div class="pr-bd"><div class="pr-tags"><span class="pr-tag">기후테크</span><span class="pr-tag">공공</span></div><h3>파워플랜 2050 교육부 보급 사업</h3><p>탄소중립 시뮬레이션을 전국 중고등학교 200개교에 보급. 교육부와 공동 수행.</p></div><div class="pr-r"><div class="pr-yr">2023</div><div class="pr-arr">→</div></div></div>
+    <div class="proj-row"><div class="pr-th g">🌊</div><div class="pr-bd"><div class="pr-tags"><span class="pr-tag">에듀테크</span><span class="pr-tag">학교</span></div><h3>바다탐험대 체험 투어 전국 운영</h3><p>XR 바다탐험대 콘텐츠로 전국 초등학생 5만 명이 해양 생태계를 직접 체험.</p></div><div class="pr-r"><div class="pr-yr">2023</div><div class="pr-arr">→</div></div></div>
+    <div class="proj-row"><div class="pr-th v">🎪</div><div class="pr-bd"><div class="pr-tags"><span class="pr-tag">전시</span><span class="pr-tag">팝업</span></div><h3>에드밴스 체험 팝업 × 성수동</h3><p>게이미피케이션 학습 플랫폼 2주간 팝업 운영. 방문객 1,200명.</p></div><div class="pr-r"><div class="pr-yr">2023</div><div class="pr-arr">→</div></div></div>
+  </div>
+  <footer><div><div class="f-logo"><span></span>NewXphere</div><p class="f-desc">에듀테크와 기후테크의 융합으로 지속가능한 미래를 설계합니다.</p></div><div class="f-col"><h5>Company</h5><ul><li><a onclick="go('about',null)">회사소개</a></li></ul></div><div class="f-col"><h5>Solutions</h5><ul><li><a onclick="go('solutions',null)">전체 솔루션</a></li></ul></div><div class="f-col"><h5>Contact</h5><ul><li><a onclick="go('contact',null)">문의하기</a></li></ul></div></footer>
+  <div class="f-bottom"><span>©2026 NewXphere. All rights reserved.</span><div class="f-bl"><a>이용약관</a><a>개인정보처리방침</a></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     STORY
+════════════════════════════════ -->
+<div class="pg" id="pg-story">
+  <div class="pg-top rv">
+    <div class="eyebrow" style="margin-bottom:14px;">Story</div>
+    <h1 class="display">뉴엑스피어의<br><em>목소리</em></h1>
+    <p>블로그, 보도자료, 전시 기록, 현장 이야기를 기록합니다.</p>
+  </div>
+  <div class="story-filter">
+    <div class="sf on">전체</div><div class="sf">블로그</div><div class="sf">보도자료</div><div class="sf">전시 기록</div><div class="sf">인사이트</div>
+  </div>
+  <div class="feat-post rv">
+    <div class="fp-img">🌿</div>
+    <div class="fp-body">
+      <div class="fp-cat">기후테크 · 인사이트</div>
+      <h2>2025년 ESG 공시 의무화, 기업이 지금 준비해야 할 것들</h2>
+      <p>단계적으로 시행되는 ESG 공시 의무화에 대비해 기업이 지금 당장 시작해야 할 5가지 실행 전략을 정리했습니다.</p>
+      <div class="fp-meta"><span>2024. 11. 15</span><span>·</span><span>5분 읽기</span></div>
+    </div>
+  </div>
+  <div class="post-grid rv">
+    <div class="post"><div class="post-img pi-g">🤖</div><div class="post-bd"><div class="post-cat">에듀테크 · AI</div><h3>AI가 바꾸는 기업 교육의 미래</h3><p>생성형 AI가 기업 교육에 미치는 영향과 아이고라가 제시하는 새로운 패러다임.</p></div><div class="post-ft"><span>2024.11.08</span><span>3분</span></div></div>
+    <div class="post"><div class="post-img pi-v">🎭</div><div class="post-bd"><div class="post-cat">전시 기록</div><h3>《생명의 그물》 전시를 마치며</h3><p>2,800명의 관람객이 함께 완성한 생태계 지도. 전시 뒷이야기를 공유합니다.</p></div><div class="post-ft"><span>2024.10.30</span><span>4분</span></div></div>
+    <div class="post"><div class="post-img pi-g">🦋</div><div class="post-bd"><div class="post-cat">기후테크 · 인사이트</div><h3>생물다양성 크레딧, ESG의 다음 화두</h3><p>Nature-based Solution의 부상과 생물다양성 크레딧 시장의 현황과 전망.</p></div><div class="post-ft"><span>2024.10.05</span><span>7분</span></div></div>
+    <div class="post"><div class="post-img pi-t">🤝</div><div class="post-bd"><div class="post-cat">소셜 임팩트</div><h3>임팩트 협업이 만들어낸 6개의 이야기</h3><p>도시재생 소셜 테크 협업 프로그램에서 탄생한 6개 팀의 결과를 공유합니다.</p></div><div class="post-ft"><span>2024.09.20</span><span>5분</span></div></div>
+    <div class="post"><div class="post-img pi-g">🎮</div><div class="post-bd"><div class="post-cat">에듀테크 · 에드밴스</div><h3>게이미피케이션이 학습 완주율을 3배 높이는 이유</h3><p>에드밴스 6개월 데이터로 분석한 게이미피케이션 학습 효과 리포트.</p></div><div class="post-ft"><span>2024.09.18</span><span>4분</span></div></div>
+    <div class="post"><div class="post-img pi-g">🌱</div><div class="post-bd"><div class="post-cat">보도자료</div><h3>시리즈 A 투자 유치 완료</h3><p>에듀테크·기후테크 융합 모델의 가능성을 인정받아 시리즈 A를 마감했습니다.</p></div><div class="post-ft"><span>2024.09.01</span><span>2분</span></div></div>
+  </div>
+  <footer><div><div class="f-logo"><span></span>NewXphere</div><p class="f-desc">에듀테크와 기후테크의 융합으로 지속가능한 미래를 설계합니다.</p></div><div class="f-col"><h5>Company</h5><ul><li><a onclick="go('about',null)">회사소개</a></li></ul></div><div class="f-col"><h5>Solutions</h5><ul><li><a onclick="go('solutions',null)">전체 솔루션</a></li></ul></div><div class="f-col"><h5>Contact</h5><ul><li><a onclick="go('contact',null)">문의하기</a></li></ul></div></footer>
+  <div class="f-bottom"><span>©2026 NewXphere. All rights reserved.</span><div class="f-bl"><a>이용약관</a><a>개인정보처리방침</a></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     CONTACT
+════════════════════════════════ -->
+<div class="pg" id="pg-contact">
+  <div class="contact-wrap rv">
+    <div class="cl">
+      <div class="eyebrow" style="margin-bottom:14px;">Contact</div>
+      <h1 class="display">함께 만드는<br><em>변화</em>를<br>시작해요</h1>
+      <p>솔루션 도입, 협업 프로그램, 전시 기획, 파트너십 등 모든 문의를 환영합니다.</p>
+      <div class="ci-list">
+        <div class="ci"><div class="ci-ico">📧</div><div><h4>이메일</h4><p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9df5f8f1f1f2ddf3f8eae5edf5f8eff8b3fef2f0">[email&#160;protected]</a></p></div></div>
+        <div class="ci"><div class="ci-ico">📞</div><div><h4>전화</h4><p>02-0000-0000</p></div></div>
+        <div class="ci"><div class="ci-ico">📍</div><div><h4>주소</h4><p>서울특별시 성동구 성수동</p></div></div>
+        <div class="ci"><div class="ci-ico">📸</div><div><h4>Instagram</h4><p>@newxphere</p></div></div>
+      </div>
+    </div>
+    <div class="cf rv d2">
+      <div class="cf-head">
+        <div class="eyebrow" style="margin-bottom:6px;">문의 양식</div>
+        <p>담당자가 1–2일 내 연락드립니다.</p>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>이름</label><input type="text" placeholder="홍길동"></div>
+        <div class="fg"><label>연락처</label><input type="text" placeholder="010-0000-0000"></div>
+      </div>
+      <div class="fg"><label>이메일</label><input type="email" placeholder="email@company.com"></div>
+      <div class="fg"><label>소속</label><input type="text" placeholder="회사명 또는 기관명"></div>
+      <div class="fg"><label>문의 유형</label>
+        <select>
+          <option>선택해주세요</option>
+          <option>에드밴스 — 교육 프로그램 도입</option>
+          <option>심비어스 — ESG / 생물다양성</option>
+          <option>아이고라 — AI 기업교육</option>
+          <option>기후테크 솔루션 도입</option>
+          <option>소셜 임팩트 협업</option>
+          <option>전시 / 이벤트 문의</option>
+          <option>파트너십 제안</option>
+          <option>언론 / 취재</option>
+          <option>기타</option>
+        </select>
+      </div>
+      <div class="fg"><label>문의 내용</label><textarea placeholder="어떤 이야기든 자유롭게 적어주세요."></textarea></div>
+      <button class="btn-g" style="width:100%;justify-content:center;"><span>보내기 →</span></button>
+    </div>
+  </div>
+  <footer><div><div class="f-logo"><span></span>NewXphere</div><p class="f-desc">에듀테크와 기후테크의 융합으로 지속가능한 미래를 설계합니다.</p></div><div class="f-col"><h5>Company</h5><ul><li><a onclick="go('about',null)">회사소개</a></li><li><a onclick="go('projects',null)">프로젝트</a></li></ul></div><div class="f-col"><h5>Solutions</h5><ul><li><a onclick="go('solutions',null)">전체 솔루션</a></li></ul></div><div class="f-col"><h5>Links</h5><ul><li><a href="https://instagram.com/newxphere" target="_blank">Instagram</a></li><li><a>LinkedIn</a></li></ul></div></footer>
+  <div class="f-bottom"><span>©2026 NewXphere. All rights reserved.</span><div class="f-bl"><a>이용약관</a><a>개인정보처리방침</a></div></div>
+</div>
+
+<script>
+// Audience card hover effect
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.aud-card').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.style.borderColor = 'rgba(255,255,255,.14)';
+      card.style.transform = 'translateY(-4px)';
+      card.style.boxShadow = '0 20px 52px rgba(0,0,0,.45)';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.borderColor = 'var(--line)';
+      card.style.transform = '';
+      card.style.boxShadow = '';
+    });
+  });
+});
+
+function showSol(type) {
+  // Hide all panels
+  document.querySelectorAll('.sol-detail').forEach(d => d.style.display = 'none');
+  // Show selected
+  const panel = document.getElementById('sol-' + type);
+  if (panel) {
+    panel.style.display = 'block';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  // Highlight active card
+  document.querySelectorAll('.aud-card').forEach(c => {
+    c.style.opacity = '0.45';
+    c.style.transform = '';
+  });
+  // Find and highlight the clicked card by matching onclick
+  document.querySelectorAll('.aud-card').forEach(c => {
+    if (c.getAttribute('onclick') === `showSol('${type}')`) {
+      c.style.opacity = '1';
+      c.style.borderColor = 'rgba(74,222,128,.3)';
+      c.style.boxShadow = '0 0 0 1px rgba(74,222,128,.15)';
+    }
+  });
+}
+
+function hideSol() {
+  document.querySelectorAll('.sol-detail').forEach(d => d.style.display = 'none');
+  document.querySelectorAll('.aud-card').forEach(c => {
+    c.style.opacity = '1';
+    c.style.borderColor = 'var(--line)';
+    c.style.boxShadow = '';
+  });
+}
+
+function go(id, el) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.getElementById('pg-' + id).classList.add('on');
+  window.scrollTo({ top: 0 });
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('on'));
+  if (el) el.classList.add('on');
+  setTimeout(reveal, 80);
+}
+document.querySelector('.logo').addEventListener('click', () => {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.getElementById('pg-home').classList.add('on');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('on'));
+  window.scrollTo({ top: 0 });
+  setTimeout(reveal, 80);
+});
+
+function reveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }});
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.pg.on .rv:not(.vis)').forEach(el => obs.observe(el));
+}
+reveal();
+window.addEventListener('scroll', reveal, { passive: true });
+
+function setTl(row, idx) {
+  document.querySelectorAll('.tl-r').forEach(r => r.classList.remove('on'));
+  row.classList.add('on');
+  document.querySelectorAll('.tl-panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tl-panel')[idx]?.classList.add('on');
+}
+
+document.addEventListener('click', e => {
+  ['pf','sf'].forEach(cls => {
+    if (e.target.classList.contains(cls)) {
+      e.target.closest('div').querySelectorAll('.' + cls).forEach(b => b.classList.remove('on'));
+      e.target.classList.add('on');
+    }
+  });
+});
+</script>
+</body>
+</html>
